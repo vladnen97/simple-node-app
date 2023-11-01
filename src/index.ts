@@ -3,6 +3,10 @@ import express, {Request, Response, Application} from 'express'
 const app: Application = express()
 const port = 3000
 
+app.use(express.json())
+app.use(express.urlencoded({
+    extended: true
+}))
 
 const products = [{id: 1, title: 'tomato'}, {id: 2, title: 'orange'}]
 const addresses = [{id: 1, value: 'Nezalejnosti 12'}, {id: 2, value: 'Selisckaya 11'}]
