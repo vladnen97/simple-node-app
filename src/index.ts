@@ -40,7 +40,24 @@ app.get('/addresses/:id', (req: Request, res: Response) => {
     }
 })
 
-
+app.delete('/products/:id', (req: Request, res: Response) => {
+    const productId = products.findIndex(el => el.id === +req.params.id)
+    if (productId !== -1) {
+        console.log('попал')
+        products.splice(productId, 1)
+        res.sendStatus(204)
+    } else {
+        res.status(404).send('Product with this id does not exist :(')
+    }
+})
+app.post('/products', (req: Request, res: Response) => {
+    const newProduct = {
+        title: req.body.title,
+        id: +(new Date())
+    }
+    products.push(newProduct)
+    res.status(201).send(newProduct)
+})
 
 
 app.listen(port, () => {
