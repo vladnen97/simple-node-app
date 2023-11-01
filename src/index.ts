@@ -47,7 +47,6 @@ app.get('/addresses/:id', (req: Request, res: Response) => {
 app.delete('/products/:id', (req: Request, res: Response) => {
     const productId = products.findIndex(el => el.id === +req.params.id)
     if (productId !== -1) {
-        console.log('попал')
         products.splice(productId, 1)
         res.sendStatus(204)
     } else {
@@ -61,6 +60,16 @@ app.post('/products', (req: Request, res: Response) => {
     }
     products.push(newProduct)
     res.status(201).send(newProduct)
+})
+
+app.put('/products/:id', (req: Request, res: Response) => {
+    const productId = products.findIndex(el => el.id === +req.params.id)
+    if (productId !== -1) {
+        products[productId].title = req.body.title
+        res.status(201).send(products[productId])
+    } else {
+        res.status(404).send('Product with this id does not exist :(')
+    }
 })
 
 
