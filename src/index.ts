@@ -1,6 +1,6 @@
-import express, {Request, Response, Application} from 'express'
-import {productsRoutes} from './routes/products-router';
-import {addressesRoutes} from './routes/addresses-router';
+import express, {Application, Request, Response} from 'express'
+import {productsRoutes} from './routes';
+import {addressesRoutes} from './routes';
 
 const app: Application = express()
 const port = 3000
