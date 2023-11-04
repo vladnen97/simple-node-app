@@ -1,6 +1,5 @@
 import {Request, Response, Router} from 'express';
-import {addressesRepository} from '../repositories/addresses-repository';
-
+import {addressesRepository} from '../repositories';
 
 
 export const addressesRoutes = Router({})

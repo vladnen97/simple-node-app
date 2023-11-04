@@ -1,5 +1,5 @@
 import {Request, Response, Router} from 'express';
-import {productsRepository} from '../repositories/products-repository';
+import {productsRepository} from '../repositories';
 
 
 export const productsRoutes = Router({})
