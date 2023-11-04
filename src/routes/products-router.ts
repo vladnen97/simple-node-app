@@ -1,8 +1,12 @@
 import {Request, Response, Router} from 'express';
 import {productsRepository} from '../repositories';
+import {body} from 'express-validator';
+import {inputValidationMiddleware} from '../middlewares/input-validation-middleware';
 
 
 export const productsRoutes = Router({})
+
+const titleValidationChain = () => body('title').trim().notEmpty().withMessage('title is required')
 
 productsRoutes.get('/', (req: Request, res: Response) => {
     const products = productsRepository.findProducts(req.query.title?.toString())
@@ -18,16 +22,13 @@ productsRoutes.get('/:id', (req: Request, res: Response) => {
         res.status(404).send('Product not found :(')
     }
 })
-productsRoutes.post('/', (req: Request, res: Response) => {
-    if (req.body.title) {
-        const newProduct = productsRepository.createProduct(req.body.title)
-        res.status(201).send(newProduct)
-    } else {
-        res.status(404).send('title is required')
-    }
 
+productsRoutes.post('/', titleValidationChain(), inputValidationMiddleware, (req: Request, res: Response) => {
+    const newProduct = productsRepository.createProduct(req.body.title)
+    res.status(201).send(newProduct)
 })
-productsRoutes.put('/:id', (req: Request, res: Response) => {
+
+productsRoutes.put('/:id', titleValidationChain(), inputValidationMiddleware, (req: Request, res: Response) => {
     const product = productsRepository.updateProductById(+req.params.id, req.body.title)
 
     if (product) {
