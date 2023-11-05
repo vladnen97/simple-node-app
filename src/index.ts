@@ -1,9 +1,10 @@
 import express, {Application, Request, Response} from 'express'
 import {productsRoutes} from './routes';
 import {addressesRoutes} from './routes';
+import {run} from './repositories/db';
 
 const app: Application = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(express.urlencoded({
@@ -16,6 +17,11 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!')
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+const startApp = async () => {
+    await run()
+    app.listen(port, () => {
+        console.log(`Example app listening on port ${port}`)
+    })
+}
+
+startApp()
