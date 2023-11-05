@@ -3,7 +3,6 @@ import {productsRepository} from '../repositories';
 import {body} from 'express-validator';
 import {inputValidationMiddleware} from '../middlewares/input-validation-middleware';
 
-
 export const productsRoutes = Router({})
 
 const titleValidationChain = () => body('title').trim().notEmpty().withMessage('title is required')
@@ -22,12 +21,10 @@ productsRoutes.get('/:id', async (req: Request, res: Response) => {
         res.status(404).send('Product not found :(')
     }
 })
-
 productsRoutes.post('/', titleValidationChain(), inputValidationMiddleware, async (req: Request, res: Response) => {
     const newProduct = await productsRepository.createProduct(req.body.title)
     res.status(201).send(newProduct)
 })
-
 productsRoutes.put('/:id', titleValidationChain(), inputValidationMiddleware, async (req: Request, res: Response) => {
     const product = await productsRepository.updateProductById(+req.params.id, req.body.title)
 
@@ -40,7 +37,7 @@ productsRoutes.put('/:id', titleValidationChain(), inputValidationMiddleware, as
 productsRoutes.delete('/:id', async (req: Request, res: Response) => {
     const productId = await  productsRepository.deleteProductById(+req.params.id)
 
-    if (productId !== undefined) {
+    if (productId !== null) {
         res.sendStatus(204)
     } else {
         res.status(404).send('Product with this id does not exist :(')
