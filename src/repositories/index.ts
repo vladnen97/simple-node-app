@@ -1,2 +1,2 @@
-export * from './products-repository'
-export * from './addresses-repository'
+export * from './products-db-repository'
+export * from './db'
