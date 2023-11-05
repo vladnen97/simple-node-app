@@ -8,13 +8,13 @@ export const productsRoutes = Router({})
 
 const titleValidationChain = () => body('title').trim().notEmpty().withMessage('title is required')
 
-productsRoutes.get('/', (req: Request, res: Response) => {
-    const products = productsRepository.findProducts(req.query.title?.toString())
+productsRoutes.get('/', async (req: Request, res: Response) => {
+    const products = await productsRepository.findProducts(req.query.title?.toString())
 
     res.send(products)
 })
-productsRoutes.get('/:id', (req: Request, res: Response) => {
-    const product = productsRepository.findProductById(+req.params.id)
+productsRoutes.get('/:id', async (req: Request, res: Response) => {
+    const product = await productsRepository.findProductById(+req.params.id)
 
     if (product) {
         res.send(product)
@@ -23,13 +23,13 @@ productsRoutes.get('/:id', (req: Request, res: Response) => {
     }
 })
 
-productsRoutes.post('/', titleValidationChain(), inputValidationMiddleware, (req: Request, res: Response) => {
-    const newProduct = productsRepository.createProduct(req.body.title)
+productsRoutes.post('/', titleValidationChain(), inputValidationMiddleware, async (req: Request, res: Response) => {
+    const newProduct = await productsRepository.createProduct(req.body.title)
     res.status(201).send(newProduct)
 })
 
-productsRoutes.put('/:id', titleValidationChain(), inputValidationMiddleware, (req: Request, res: Response) => {
-    const product = productsRepository.updateProductById(+req.params.id, req.body.title)
+productsRoutes.put('/:id', titleValidationChain(), inputValidationMiddleware, async (req: Request, res: Response) => {
+    const product = await productsRepository.updateProductById(+req.params.id, req.body.title)
 
     if (product) {
         res.status(201).send(product)
@@ -37,8 +37,8 @@ productsRoutes.put('/:id', titleValidationChain(), inputValidationMiddleware, (r
         res.status(404).send('Product with this id does not exist :(')
     }
 })
-productsRoutes.delete('/:id', (req: Request, res: Response) => {
-    const productId = productsRepository.deleteProductById(+req.params.id)
+productsRoutes.delete('/:id', async (req: Request, res: Response) => {
+    const productId = await  productsRepository.deleteProductById(+req.params.id)
 
     if (productId !== undefined) {
         res.sendStatus(204)
