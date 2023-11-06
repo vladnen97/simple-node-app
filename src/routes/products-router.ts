@@ -1,19 +1,19 @@
 import {Request, Response, Router} from 'express';
-import {productsRepository} from '../repositories';
 import {body} from 'express-validator';
 import {inputValidationMiddleware} from '../middlewares/input-validation-middleware';
+import {productsService} from '../domain/products-service';
 
 export const productsRoutes = Router({})
 
 const titleValidationChain = () => body('title').trim().notEmpty().withMessage('title is required')
 
 productsRoutes.get('/', async (req: Request, res: Response) => {
-    const products = await productsRepository.findProducts(req.query.title?.toString())
+    const products = await productsService.findProducts(req.query.title?.toString())
 
     res.send(products)
 })
 productsRoutes.get('/:id', async (req: Request, res: Response) => {
-    const product = await productsRepository.findProductById(+req.params.id)
+    const product = await productsService.findProductById(+req.params.id)
 
     if (product) {
         res.send(product)
@@ -22,11 +22,11 @@ productsRoutes.get('/:id', async (req: Request, res: Response) => {
     }
 })
 productsRoutes.post('/', titleValidationChain(), inputValidationMiddleware, async (req: Request, res: Response) => {
-    const newProduct = await productsRepository.createProduct(req.body.title)
+    const newProduct = await productsService.createProduct(req.body.title)
     res.status(201).send(newProduct)
 })
 productsRoutes.put('/:id', titleValidationChain(), inputValidationMiddleware, async (req: Request, res: Response) => {
-    const product = await productsRepository.updateProductById(+req.params.id, req.body.title)
+    const product = await productsService.updateProductById(+req.params.id, req.body.title)
 
     if (product) {
         res.status(201).send(product)
@@ -35,7 +35,7 @@ productsRoutes.put('/:id', titleValidationChain(), inputValidationMiddleware, as
     }
 })
 productsRoutes.delete('/:id', async (req: Request, res: Response) => {
-    const productId = await  productsRepository.deleteProductById(+req.params.id)
+    const productId = await  productsService.deleteProductById(+req.params.id)
 
     if (productId !== null) {
         res.sendStatus(204)
