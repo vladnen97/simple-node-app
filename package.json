@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
+    "pre-build": "tsc --project ./tsconfig.json",
     "start": "nodemon src/index.ts"
   },
   "keywords": [],
